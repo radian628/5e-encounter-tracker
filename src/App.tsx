@@ -5,6 +5,7 @@ import { CreatureEditor } from './CreatureEditor'
 import { Creature } from './Types';
 import { roll } from './DiceRollerParser';
 import { DiceRollerUI } from './DiceRollerUI';
+import { CreatureTemplate, CreatureTemplateEditor, instantiateCreature } from './CreatureTemplate';
 
 
 let key = 0;
@@ -17,12 +18,9 @@ function App() {
 
   //console.log(roll("2d6"));
 
-  const [creatureToAdd, setCreatureToAdd] = useState<Creature>({
-    name: "Creature Name",
-    currentHP: 10,
-    maxHP: 10,
-    statusEffects: [],
-    key: -1
+  const [template, setTemplate] = useState<CreatureTemplate>({
+    name: "Goblin",
+    hp: "2d6"
   });
 
   const [creaturesToAddCount, setCreaturesToAddCount] = useState(1);
@@ -93,23 +91,19 @@ function App() {
               }));
             }}
           >Advance Round</button>
-          <table>
-            <tbody>
-              <CreatureEditor
-                creature={creatureToAdd}
-                setCreature={setCreatureToAdd}
-              ></CreatureEditor>
-            </tbody>
-          </table>
+          <CreatureTemplateEditor
+            template={template}
+            setTemplate={setTemplate}
+          ></CreatureTemplateEditor>
           <button
             onClick={() => {
-              setCreatures([...creatures, {... creatureToAdd, key: uniqueKey()}]);
+              setCreatures([...creatures, instantiateCreature(template)]);
             }}
           >Add Creature</button>
           <button
             onClick={() => {
               setCreatures([...creatures, ...new Array(creaturesToAddCount).fill(0)
-                .map(e => { return {... creatureToAdd, key: uniqueKey()} })]);
+                .map(e => { return instantiateCreature(template) })]);
             }}
           >Add N Creatures</button><input type="number"
             value={Number(creaturesToAddCount).toString()}
