@@ -1,6 +1,7 @@
 
+import { DiceRollerEvaluatorInput } from "./DiceRollerUI";
 import { StatusEffect } from "./Types";
-import { GenericPropertyNumberInput, GenericPropertyTextInput } from "./Util";
+import { GenericPropertyNumberInput, GenericPropertyTextInput, propSetter } from "./Util";
 
 export function StatusEffectEditor(props: {
     statusEffect: StatusEffect,
@@ -13,12 +14,10 @@ export function StatusEffectEditor(props: {
             setter={props.setStatusEffect}
             prop={"name"}
         ></GenericPropertyTextInput>
-        <GenericPropertyNumberInput
-            getter={props.statusEffect}
-            setter={props.setStatusEffect}
-            prop={"remainingTurns"}
-            className="status-effect-turns number-input"
-        ></GenericPropertyNumberInput>
+        <DiceRollerEvaluatorInput
+            value={props.statusEffect.remainingTurns}
+            setValue={propSetter(props.statusEffect, "remainingTurns")}
+        ></DiceRollerEvaluatorInput>
         <button
             onClick={props.deleteStatusEffect}
         >X</button>

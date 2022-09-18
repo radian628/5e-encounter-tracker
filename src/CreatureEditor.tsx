@@ -1,6 +1,7 @@
+import { DiceRollerEvaluatorInput } from "./DiceRollerUI";
 import { StatusEffectsEditor } from "./StatusEffectsEditor";
 import { Creature } from "./Types";
-import { GenericPropertyNumberInput, GenericPropertyTextInput } from "./Util";
+import { GenericPropertyNumberInput, GenericPropertyTextInput, propSetter } from "./Util";
 
 export function CreatureEditor(props: { creature: Creature, setCreature: (c: Creature) => void, deleteCreature?: () => void }) {
     return <tr>
@@ -16,7 +17,18 @@ export function CreatureEditor(props: { creature: Creature, setCreature: (c: Cre
         </td>
         <td>
             <div className="hp">
-                <GenericPropertyNumberInput
+                <DiceRollerEvaluatorInput
+                    className="hp-input"
+                    value={props.creature.currentHP}
+                    setValue={propSetter(props.creature, "currentHP")}
+                ></DiceRollerEvaluatorInput>
+                /
+                <DiceRollerEvaluatorInput
+                    className="hp-input"
+                    value={props.creature.maxHP}
+                    setValue={propSetter(props.creature, "maxHP")}
+                ></DiceRollerEvaluatorInput>
+                {/* <GenericPropertyNumberInput
                     getter={props.creature}
                     setter={props.setCreature}
                     prop="currentHP"
@@ -28,7 +40,7 @@ export function CreatureEditor(props: { creature: Creature, setCreature: (c: Cre
                     setter={props.setCreature}
                     prop="maxHP"
                     className="hp-input"
-                ></GenericPropertyNumberInput>
+                ></GenericPropertyNumberInput> */}
             </div>
         </td>
         <td>

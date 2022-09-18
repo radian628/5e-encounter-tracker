@@ -46,3 +46,13 @@ export function GenericPropertyNumberInput<T>(props: {
         html={props.getter[props.prop].toString()}
     ></ContentEditable>
 }
+
+
+export function propSetter<T extends {}, K extends keyof T>(obj: T, key: K) {
+    return (newValue: T[K]) => {
+        return {
+            ...obj,
+            [key]: newValue
+        };
+    }
+}
