@@ -15,19 +15,21 @@ export function CreatureEditor(props: { creature: Creature, setCreature: (c: Cre
             ></GenericPropertyTextInput>
         </td>
         <td>
-            <GenericPropertyNumberInput
-                getter={props.creature}
-                setter={props.setCreature}
-                prop="currentHP"
-                className="hp-btn"
-            ></GenericPropertyNumberInput>
-            /
-            <GenericPropertyNumberInput
-                getter={props.creature}
-                setter={props.setCreature}
-                prop="maxHP"
-                className="hp-btn"
-            ></GenericPropertyNumberInput>
+            <div className="hp">
+                <GenericPropertyNumberInput
+                    getter={props.creature}
+                    setter={props.setCreature}
+                    prop="currentHP"
+                    className="hp-input"
+                ></GenericPropertyNumberInput>
+                /
+                <GenericPropertyNumberInput
+                    getter={props.creature}
+                    setter={props.setCreature}
+                    prop="maxHP"
+                    className="hp-input"
+                ></GenericPropertyNumberInput>
+            </div>
         </td>
         <td>
             <StatusEffectsEditor

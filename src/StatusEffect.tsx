@@ -17,7 +17,7 @@ export function StatusEffectEditor(props: {
             getter={props.statusEffect}
             setter={props.setStatusEffect}
             prop={"remainingTurns"}
-            className="status-effect-turns"
+            className="status-effect-turns number-input"
         ></GenericPropertyNumberInput>
         <button
             onClick={props.deleteStatusEffect}
