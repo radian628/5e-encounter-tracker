@@ -118,14 +118,23 @@ function noUndefined<T extends {}>(obj: T): OmitPropertiesOfType<T, undefined> {
 export function DiceRollerEvaluatorInput(props: {
     value: number,
     setValue: (n: number) => void;
+    autoFocus?: boolean
 } & React.HTMLAttributes<HTMLInputElement>) {
+    const contentEditableRef = useRef<HTMLElement>(null);
+    useEffect(() => {
+        if (contentEditableRef.current) {
+            if (props.autoFocus) contentEditableRef.current.focus();
+        }
+    })
 
     const [code, setCode] = useState<string>(props.value.toString());
     const [isErr, setIsErr] = useState(false);
 
-    if (!isNaN(Number(code))) {
-        props.setValue(Number(code));
-    }
+    useEffect(() => {
+        if (!isNaN(Number(code))) {
+            props.setValue(Number(code));
+        }
+    })
 
     function tryEval(text: string) {
         try {
@@ -138,6 +147,7 @@ export function DiceRollerEvaluatorInput(props: {
     }
 
     return <ContentEditable 
+        innerRef={contentEditableRef}
         style={{ background: isErr ? "#FF0000" : "" }}
         {...noUndefined({ ...props, value: undefined, setValue: undefined }) }
         html={code}

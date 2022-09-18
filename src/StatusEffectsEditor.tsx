@@ -1,6 +1,7 @@
 import { StatusEffectEditor } from "./StatusEffect"
 import { StatusEffect } from "./Types"
 
+let statusEffectIndex = 0;
 
 export function StatusEffectsEditor(props: {
     statusEffects: StatusEffect[],
@@ -17,6 +18,7 @@ export function StatusEffectsEditor(props: {
                     deleteStatusEffect={() => {
                         props.setStatusEffects(props.statusEffects.filter((e, i2) => (i != i2)));
                     }}
+                    key={e.key}
                 ></StatusEffectEditor>
             })
         }
@@ -24,7 +26,8 @@ export function StatusEffectsEditor(props: {
             onClick={se => {
                 props.setStatusEffects([...props.statusEffects, {
                     name: "",
-                    remainingTurns: 1
+                    remainingTurns: 1,
+                    key: statusEffectIndex++
                 }]);
             }}
         >+</button>

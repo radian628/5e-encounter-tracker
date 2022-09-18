@@ -2,9 +2,9 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { CreatureEditor } from './CreatureEditor'
-import { Creature } from './Types';
+import { Creature, FocusedInput } from './Types';
 import { roll } from './DiceRollerParser';
-import { DiceRollerUI } from './DiceRollerUI';
+import { DiceRollerEvaluatorInput, DiceRollerUI } from './DiceRollerUI';
 import { CreatureTemplate, CreatureTemplateEditor, instantiateCreature } from './CreatureTemplate';
 
 
@@ -28,15 +28,18 @@ function App() {
   const [creatures, setCreatures] = useState<Creature[]>([
     {
       name: "test",
-      currentHP: 5,
+      currentHP: 10,
       maxHP: 10,
       statusEffects: [
-        { name: "status effect", remainingTurns: 4 }
+        { name: "status effect", remainingTurns: 4, key: -1 }
       ],
-      key: uniqueKey()
+      key: -5
     }
   ]);
 
+  const [focusedCreatureInput, setFocusedCreatureInput] = useState(FocusedInput.OTHER);
+  const [focusedCreatureIndex, setFocusedCreatureIndex] = useState<number | undefined>(undefined);
+console.log(focusedCreatureIndex);
   return (
     <div className="App">
       <h1>5e Encounter Tracker</h1>
@@ -48,7 +51,21 @@ function App() {
         <div>
           <h2>Creatures</h2>
           <table>
-            <tbody>
+            <tbody 
+              // onBlur={e => {
+              //   setFocusedCreatureIndex(undefined);
+              // }}
+              onKeyDown={e => {
+                if (e.key == "ArrowDown" && focusedCreatureIndex !== undefined) {
+                  console.log(focusedCreatureIndex, "pressed down arrow");
+                  setFocusedCreatureIndex(Math.min(focusedCreatureIndex + 1, creatures.length - 1));
+                }
+                if (e.key == "ArrowUp" && focusedCreatureIndex !== undefined) {
+                  console.log(focusedCreatureIndex, "pressed up arrow");
+                  setFocusedCreatureIndex(Math.max(focusedCreatureIndex - 1, 0));
+                }
+              }}
+            >
               <tr>
                 <th>Name</th>
                 <th>HP</th>
@@ -56,7 +73,9 @@ function App() {
               </tr>
               {
                 creatures.map((c, i) => {
+                  console.log("is focused?", i == focusedCreatureIndex, "index", i);
                   return <CreatureEditor
+                    index={i}
                     creature={c}
                     setCreature={creature => {
                       setCreatures(creatures.map((c2, i2) => (i2 == i) ? creature : c2));
@@ -65,6 +84,16 @@ function App() {
                     deleteCreature={() => {
                       setCreatures(creatures.filter((c2, i2) => (i != i2)));
                     }}
+                    focusedInput={focusedCreatureInput}
+                    setFocusedInput={e => {
+                      console.log("focusedinput", e, "index", i);
+                      setFocusedCreatureInput(e);
+                    }}
+                    onFocus={e => {
+                      setFocusedCreatureIndex(i);
+                      console.log("onFocus called for", i);
+                    }}
+                    isFocused={i == focusedCreatureIndex}
                   ></CreatureEditor>
                 })
               }
@@ -105,12 +134,11 @@ function App() {
               setCreatures([...creatures, ...new Array(creaturesToAddCount).fill(0)
                 .map(e => { return instantiateCreature(template) })]);
             }}
-          >Add N Creatures</button><input type="number"
-            value={Number(creaturesToAddCount).toString()}
-            onChange={e => {
-              setCreaturesToAddCount(Number(e.currentTarget.value));
-            }}
-          ></input>
+          >Add N Creatures</button>
+          <DiceRollerEvaluatorInput
+            value={creaturesToAddCount}
+            setValue={setCreaturesToAddCount}
+          ></DiceRollerEvaluatorInput>
         </div>
       </div>
     </div>

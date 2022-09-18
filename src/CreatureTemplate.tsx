@@ -25,12 +25,14 @@ export function CreatureTemplateEditor(props: {
 }) {
 
     return <div>
-        <GenericPropertyTextInput
+        <GenericPropertyTextInput<CreatureTemplate>
+            className="resizing-text-input"
             getter={props.template}
             setter={props.setTemplate}
             prop={"name"}
         ></GenericPropertyTextInput>
-        <GenericPropertyTextInput
+        <GenericPropertyTextInput<CreatureTemplate>
+            className="resizing-text-input"
             getter={props.template}
             setter={props.setTemplate}
             prop={"hp"}

@@ -1,7 +1,11 @@
+export enum FocusedInput {
+  NAME, CURRENT_HP, MAX_HP, OTHER
+}
 
 export type StatusEffect = {
     name: string,
-    remainingTurns: number
+    remainingTurns: number,
+    key: number
   }
   
   export type Creature = {

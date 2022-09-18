@@ -22,6 +22,15 @@ th {
   padding-left: 8px;
 }
 
+.resizing-text-input {
+  display: block;
+  border: none;
+  border-radius: 3px;
+  background: #eeeeee;
+  margin-right: 5px;
+  padding: 2px;
+}
+
 input {
   border: none;
   border-radius: 3px;
@@ -106,4 +115,8 @@ button:hover {
   border-radius: 10px;
   margin: 5px;
   padding: 10px;
+}
+
+.row {
+  display: flex;
 }

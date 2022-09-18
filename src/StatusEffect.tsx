@@ -9,12 +9,14 @@ export function StatusEffectEditor(props: {
     deleteStatusEffect: () => void
 }) {
     return <div className="status-effect-container">
-        <GenericPropertyTextInput
+        <GenericPropertyTextInput<StatusEffect>
+            className="resizing-text-input"
             getter={props.statusEffect}
             setter={props.setStatusEffect}
             prop={"name"}
         ></GenericPropertyTextInput>
         <DiceRollerEvaluatorInput
+            className="resizing-text-input"
             value={props.statusEffect.remainingTurns}
             setValue={propSetter(props.statusEffect, "remainingTurns")}
         ></DiceRollerEvaluatorInput>
