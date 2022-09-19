@@ -127,14 +127,22 @@ export function DiceRollerEvaluatorInput(props: {
         }
     })
 
+    const [originallySetValue, setOriginallySetValue] = useState(props.value);
+
+
     const [code, setCode] = useState<string>(props.value.toString());
     const [isErr, setIsErr] = useState(false);
+
+    if (originallySetValue != props.value) {
+        setCode(props.value.toString());
+        setOriginallySetValue(props.value);
+    }
 
     useEffect(() => {
         if (!isNaN(Number(code))) {
             props.setValue(Number(code));
         }
-    })
+    });
 
     function tryEval(text: string) {
         try {

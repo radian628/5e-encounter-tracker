@@ -18,8 +18,8 @@ implements DiceRollerVisitor<number>{
         const rhs = this.visit(ctx._rhs);
         if (ctx._op.text == "d") {
             let x = 0;
-            for (let i = 0; i < lhs; i++) {
-                x += Math.floor(Math.random() * rhs) + 1;
+            for (let i = 0; i < Math.abs(lhs); i++) {
+                x += (Math.floor(Math.random() * rhs) + 1) * Math.sign(lhs);
             }
             return x;
         }
@@ -32,7 +32,7 @@ implements DiceRollerVisitor<number>{
     }
 
     visitParenthesized(ctx: ParenthesizedContext) {
-        return this.visit(ctx._inner);
+        return this.visit(ctx._inner) * ((ctx._negative.text == "-") ? -1 : 1);
     }
 
     visitNumber(ctx: NumberContext) {

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { CreatureEditor } from './CreatureEditor'
@@ -6,6 +6,7 @@ import { Creature, FocusedInput } from './Types';
 import { roll } from './DiceRollerParser';
 import { DiceRollerEvaluatorInput, DiceRollerUI } from './DiceRollerUI';
 import { CreatureTemplate, CreatureTemplateEditor, instantiateCreature } from './CreatureTemplate';
+import { GenericPropertyTextInput } from './Util';
 
 
 let key = 0;
@@ -14,14 +15,12 @@ function uniqueKey() {
 }
 
 function App() {
-  const [count, setCount] = useState(0); 
-
-  //console.log(roll("2d6"));
-
   const [template, setTemplate] = useState<CreatureTemplate>({
     name: "Goblin",
     hp: "2d6"
   });
+
+  const [round, setRound] = useState(1);
 
   const [creaturesToAddCount, setCreaturesToAddCount] = useState(1);
 
@@ -37,9 +36,30 @@ function App() {
     }
   ]);
 
+  const [settings, setSettings] = useState({
+    deltaHP: "1d6",
+    statusName: "Status Effect",
+    statusRounds: 5
+  });
+
+  const [selectedCreatureKeys, setSelectedCreatureKeys] = useState<Set<number>>(new Set<number>());
+
+  //const keyToIndexMap = new Map(creatures.map((c, i) => [c.key, i]));
+
   const [focusedCreatureInput, setFocusedCreatureInput] = useState(FocusedInput.OTHER);
   const [focusedCreatureIndex, setFocusedCreatureIndex] = useState<number | undefined>(undefined);
-console.log(focusedCreatureIndex);
+
+  function damageSelectedCreature() {
+    setCreatures(creatures.map(
+      c => {
+        return {
+          ...c,
+          currentHP: selectedCreatureKeys.has(c.key) ? c.currentHP - roll(settings.deltaHP) : c.currentHP
+        }
+      }
+    ))
+  }
+
   return (
     <div className="App">
       <h1>5e Encounter Tracker</h1>
@@ -57,11 +77,9 @@ console.log(focusedCreatureIndex);
               // }}
               onKeyDown={e => {
                 if (e.key == "ArrowDown" && focusedCreatureIndex !== undefined) {
-                  console.log(focusedCreatureIndex, "pressed down arrow");
                   setFocusedCreatureIndex(Math.min(focusedCreatureIndex + 1, creatures.length - 1));
                 }
                 if (e.key == "ArrowUp" && focusedCreatureIndex !== undefined) {
-                  console.log(focusedCreatureIndex, "pressed up arrow");
                   setFocusedCreatureIndex(Math.max(focusedCreatureIndex - 1, 0));
                 }
               }}
@@ -73,8 +91,19 @@ console.log(focusedCreatureIndex);
               </tr>
               {
                 creatures.map((c, i) => {
-                  console.log("is focused?", i == focusedCreatureIndex, "index", i);
                   return <CreatureEditor
+                    selected={selectedCreatureKeys.has(c.key)}
+                    toggleSelected={() => {
+                      if (selectedCreatureKeys.has(c.key)) {
+                        const newSet = new Set(selectedCreatureKeys);
+                        newSet.delete(c.key);
+                        setSelectedCreatureKeys(newSet);
+                      } else {
+                        const newSet = new Set(selectedCreatureKeys);
+                        newSet.add(c.key);
+                        setSelectedCreatureKeys(newSet);
+                      }
+                    }}
                     index={i}
                     creature={c}
                     setCreature={creature => {
@@ -86,12 +115,10 @@ console.log(focusedCreatureIndex);
                     }}
                     focusedInput={focusedCreatureInput}
                     setFocusedInput={e => {
-                      console.log("focusedinput", e, "index", i);
                       setFocusedCreatureInput(e);
                     }}
                     onFocus={e => {
                       setFocusedCreatureIndex(i);
-                      console.log("onFocus called for", i);
                     }}
                     isFocused={i == focusedCreatureIndex}
                   ></CreatureEditor>
@@ -109,6 +136,7 @@ console.log(focusedCreatureIndex);
           <h2>Controls</h2>
           <button
             onClick={e => {
+              setRound(round + 1);
               setCreatures(creatures.map(creature => {
                 return {
                   ...creature,
@@ -120,6 +148,11 @@ console.log(focusedCreatureIndex);
               }));
             }}
           >Advance Round</button>
+          <DiceRollerEvaluatorInput
+            value={round}
+            setValue={setRound}
+            className="resizing-text-input"
+          ></DiceRollerEvaluatorInput>
           <CreatureTemplateEditor
             template={template}
             setTemplate={setTemplate}
@@ -138,7 +171,26 @@ console.log(focusedCreatureIndex);
           <DiceRollerEvaluatorInput
             value={creaturesToAddCount}
             setValue={setCreaturesToAddCount}
+            className="resizing-text-input"
           ></DiceRollerEvaluatorInput>
+
+          <button
+            onClick={() => {
+             damageSelectedCreature();
+            }}
+          >Damage Selected by...</button>
+          <GenericPropertyTextInput<typeof settings>
+              className="resizing-text-input"
+              getter={settings}
+              setter={setSettings}
+              prop={"deltaHP"}
+              autoFocus={false}
+              onKeyDown={e => {
+                if (e.key == "Enter") {
+                  damageSelectedCreature();
+                }
+              }}
+          ></GenericPropertyTextInput>
         </div>
       </div>
     </div>

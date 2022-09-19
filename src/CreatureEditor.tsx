@@ -13,21 +13,34 @@ type CreatureEditorProps =
     setFocusedInput: (i: FocusedInput) => void,
     onFocus: (e: React.FocusEvent<HTMLTableRowElement, Element>) => void,
     isFocused: boolean,
-    index: number
+    index: number,
+    toggleSelected: () => void
+    selected: boolean
 }
 
 export function CreatureEditor(props: CreatureEditorProps) {
 
     function shouldFocus(type: FocusedInput) {
-        console.log("shouldfocus?", props.isFocused, "index", props.index);
         return props.isFocused && props.focusedInput == type;
     }
 
     return <tr
         onFocus={props.onFocus}
+        style={{ backgroundColor: props.selected ? "#aaaaaa" : "" }}
     >
         <td>
             <div className="row">
+                <span 
+                    onMouseEnter={e => {
+                        console.log("btn:", e);
+                        if (e.buttons >= 1) {
+                            props.toggleSelected();
+                        }
+                    }}
+                    onMouseDown={e => {
+                        props.toggleSelected();
+                    }}
+                style={{ cursor: "pointer", userSelect: "none" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>  
                 {props.deleteCreature ? <button
                     onClick={props.deleteCreature}
                 >X</button> : undefined}
@@ -58,23 +71,11 @@ export function CreatureEditor(props: CreatureEditorProps) {
                     setValue={propSetter(props.creature, "maxHP")}
                     onFocus={() => props.setFocusedInput(FocusedInput.MAX_HP)}
                 ></DiceRollerEvaluatorInput>
-                {/* <GenericPropertyNumberInput
-                    getter={props.creature}
-                    setter={props.setCreature}
-                    prop="currentHP"
-                    className="hp-input"
-                ></GenericPropertyNumberInput>
-                /
-                <GenericPropertyNumberInput
-                    getter={props.creature}
-                    setter={props.setCreature}
-                    prop="maxHP"
-                    className="hp-input"
-                ></GenericPropertyNumberInput> */}
             </div>
         </td>
         <td>
             <StatusEffectsEditor
+                onFocus={() => props.setFocusedInput(FocusedInput.OTHER)}
                 statusEffects={props.creature.statusEffects}
                 setStatusEffects={se => {
                     props.setCreature({

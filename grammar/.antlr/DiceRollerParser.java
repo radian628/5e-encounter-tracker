@@ -28,7 +28,7 @@ public class DiceRollerParser extends Parser {
 
 	private static String[] makeLiteralNames() {
 		return new String[] {
-			null, "'('", "')'", "'d'", "'*'", "'/'", "'+'", "'-'"
+			null, "'-'", "'('", "')'", "'d'", "'*'", "'/'", "'+'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -105,6 +105,7 @@ public class DiceRollerParser extends Parser {
 		public NumberContext(ExprContext ctx) { copyFrom(ctx); }
 	}
 	public static class ParenthesizedContext extends ExprContext {
+		public Token negative;
 		public ExprContext inner;
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
@@ -140,21 +141,32 @@ public class DiceRollerParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(8);
+			setState(11);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__0:
+			case T__1:
 				{
 				_localctx = new ParenthesizedContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
 
-				setState(3);
-				match(T__0);
 				setState(4);
-				((ParenthesizedContext)_localctx).inner = expr(0);
-				setState(5);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+				if (_la==T__0) {
+					{
+					setState(3);
+					((ParenthesizedContext)_localctx).negative = match(T__0);
+					}
+				}
+
+				setState(6);
 				match(T__1);
+				setState(7);
+				((ParenthesizedContext)_localctx).inner = expr(0);
+				setState(8);
+				match(T__2);
 				}
 				break;
 			case NUMBER:
@@ -162,7 +174,7 @@ public class DiceRollerParser extends Parser {
 				_localctx = new NumberContext(_localctx);
 				_ctx = _localctx;
 				_prevctx = _localctx;
-				setState(7);
+				setState(10);
 				((NumberContext)_localctx).number = match(NUMBER);
 				}
 				break;
@@ -170,27 +182,27 @@ public class DiceRollerParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(21);
+			setState(24);
 			_errHandler.sync(this);
-			_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+			_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
 				if ( _alt==1 ) {
 					if ( _parseListeners!=null ) triggerExitRuleEvent();
 					_prevctx = _localctx;
 					{
-					setState(19);
+					setState(22);
 					_errHandler.sync(this);
-					switch ( getInterpreter().adaptivePredict(_input,1,_ctx) ) {
+					switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 					case 1:
 						{
 						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
 						((BinopContext)_localctx).lhs = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(10);
+						setState(13);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
-						setState(11);
-						((BinopContext)_localctx).op = match(T__2);
-						setState(12);
+						setState(14);
+						((BinopContext)_localctx).op = match(T__3);
+						setState(15);
 						((BinopContext)_localctx).rhs = expr(5);
 						}
 						break;
@@ -199,34 +211,12 @@ public class DiceRollerParser extends Parser {
 						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
 						((BinopContext)_localctx).lhs = _prevctx;
 						pushNewRecursionContext(_localctx, _startState, RULE_expr);
-						setState(13);
-						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
-						setState(14);
-						((BinopContext)_localctx).op = _input.LT(1);
-						_la = _input.LA(1);
-						if ( !(_la==T__3 || _la==T__4) ) {
-							((BinopContext)_localctx).op = (Token)_errHandler.recoverInline(this);
-						}
-						else {
-							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
-							_errHandler.reportMatch(this);
-							consume();
-						}
-						setState(15);
-						((BinopContext)_localctx).rhs = expr(4);
-						}
-						break;
-					case 3:
-						{
-						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
-						((BinopContext)_localctx).lhs = _prevctx;
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
 						setState(16);
-						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						if (!(precpred(_ctx, 3))) throw new FailedPredicateException(this, "precpred(_ctx, 3)");
 						setState(17);
 						((BinopContext)_localctx).op = _input.LT(1);
 						_la = _input.LA(1);
-						if ( !(_la==T__5 || _la==T__6) ) {
+						if ( !(_la==T__4 || _la==T__5) ) {
 							((BinopContext)_localctx).op = (Token)_errHandler.recoverInline(this);
 						}
 						else {
@@ -235,15 +225,37 @@ public class DiceRollerParser extends Parser {
 							consume();
 						}
 						setState(18);
+						((BinopContext)_localctx).rhs = expr(4);
+						}
+						break;
+					case 3:
+						{
+						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
+						((BinopContext)_localctx).lhs = _prevctx;
+						pushNewRecursionContext(_localctx, _startState, RULE_expr);
+						setState(19);
+						if (!(precpred(_ctx, 2))) throw new FailedPredicateException(this, "precpred(_ctx, 2)");
+						setState(20);
+						((BinopContext)_localctx).op = _input.LT(1);
+						_la = _input.LA(1);
+						if ( !(_la==T__0 || _la==T__6) ) {
+							((BinopContext)_localctx).op = (Token)_errHandler.recoverInline(this);
+						}
+						else {
+							if ( _input.LA(1)==Token.EOF ) matchedEOF = true;
+							_errHandler.reportMatch(this);
+							consume();
+						}
+						setState(21);
 						((BinopContext)_localctx).rhs = expr(3);
 						}
 						break;
 					}
 					} 
 				}
-				setState(23);
+				setState(26);
 				_errHandler.sync(this);
-				_alt = getInterpreter().adaptivePredict(_input,2,_ctx);
+				_alt = getInterpreter().adaptivePredict(_input,3,_ctx);
 			}
 			}
 		}
@@ -278,15 +290,16 @@ public class DiceRollerParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\13\33\4\2\t\2\3\2"+
-		"\3\2\3\2\3\2\3\2\3\2\5\2\13\n\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\3\2\7"+
-		"\2\26\n\2\f\2\16\2\31\13\2\3\2\2\3\2\3\2\2\4\3\2\6\7\3\2\b\t\2\35\2\n"+
-		"\3\2\2\2\4\5\b\2\1\2\5\6\7\3\2\2\6\7\5\2\2\2\7\b\7\4\2\2\b\13\3\2\2\2"+
-		"\t\13\7\n\2\2\n\4\3\2\2\2\n\t\3\2\2\2\13\27\3\2\2\2\f\r\f\6\2\2\r\16\7"+
-		"\5\2\2\16\26\5\2\2\7\17\20\f\5\2\2\20\21\t\2\2\2\21\26\5\2\2\6\22\23\f"+
-		"\4\2\2\23\24\t\3\2\2\24\26\5\2\2\5\25\f\3\2\2\2\25\17\3\2\2\2\25\22\3"+
-		"\2\2\2\26\31\3\2\2\2\27\25\3\2\2\2\27\30\3\2\2\2\30\3\3\2\2\2\31\27\3"+
-		"\2\2\2\5\n\25\27";
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\13\36\4\2\t\2\3\2"+
+		"\3\2\5\2\7\n\2\3\2\3\2\3\2\3\2\3\2\5\2\16\n\2\3\2\3\2\3\2\3\2\3\2\3\2"+
+		"\3\2\3\2\3\2\7\2\31\n\2\f\2\16\2\34\13\2\3\2\2\3\2\3\2\2\4\3\2\7\b\4\2"+
+		"\3\3\t\t\2!\2\r\3\2\2\2\4\6\b\2\1\2\5\7\7\3\2\2\6\5\3\2\2\2\6\7\3\2\2"+
+		"\2\7\b\3\2\2\2\b\t\7\4\2\2\t\n\5\2\2\2\n\13\7\5\2\2\13\16\3\2\2\2\f\16"+
+		"\7\n\2\2\r\4\3\2\2\2\r\f\3\2\2\2\16\32\3\2\2\2\17\20\f\6\2\2\20\21\7\6"+
+		"\2\2\21\31\5\2\2\7\22\23\f\5\2\2\23\24\t\2\2\2\24\31\5\2\2\6\25\26\f\4"+
+		"\2\2\26\27\t\3\2\2\27\31\5\2\2\5\30\17\3\2\2\2\30\22\3\2\2\2\30\25\3\2"+
+		"\2\2\31\34\3\2\2\2\32\30\3\2\2\2\32\33\3\2\2\2\33\3\3\2\2\2\34\32\3\2"+
+		"\2\2\6\6\r\30\32";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {

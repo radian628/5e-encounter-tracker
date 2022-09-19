@@ -44,7 +44,7 @@ export class DiceRollerParser extends Parser {
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, "'('", "')'", "'d'", "'*'", "'/'", "'+'", "'-'",
+		undefined, "'-'", "'('", "')'", "'d'", "'*'", "'/'", "'+'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
 		undefined, undefined, undefined, undefined, undefined, undefined, undefined, 
@@ -96,21 +96,32 @@ export class DiceRollerParser extends Parser {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-			this.state = 8;
+			this.state = 11;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 			case DiceRollerParser.T__0:
+			case DiceRollerParser.T__1:
 				{
 				_localctx = new ParenthesizedContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
 
-				this.state = 3;
-				this.match(DiceRollerParser.T__0);
 				this.state = 4;
-				(_localctx as ParenthesizedContext)._inner = this.expr(0);
-				this.state = 5;
+				this._errHandler.sync(this);
+				_la = this._input.LA(1);
+				if (_la === DiceRollerParser.T__0) {
+					{
+					this.state = 3;
+					(_localctx as ParenthesizedContext)._negative = this.match(DiceRollerParser.T__0);
+					}
+				}
+
+				this.state = 6;
 				this.match(DiceRollerParser.T__1);
+				this.state = 7;
+				(_localctx as ParenthesizedContext)._inner = this.expr(0);
+				this.state = 8;
+				this.match(DiceRollerParser.T__2);
 				}
 				break;
 			case DiceRollerParser.NUMBER:
@@ -118,7 +129,7 @@ export class DiceRollerParser extends Parser {
 				_localctx = new NumberContext(_localctx);
 				this._ctx = _localctx;
 				_prevctx = _localctx;
-				this.state = 7;
+				this.state = 10;
 				(_localctx as NumberContext)._number = this.match(DiceRollerParser.NUMBER);
 				}
 				break;
@@ -126,9 +137,9 @@ export class DiceRollerParser extends Parser {
 				throw new NoViableAltException(this);
 			}
 			this._ctx._stop = this._input.tryLT(-1);
-			this.state = 21;
+			this.state = 24;
 			this._errHandler.sync(this);
-			_alt = this.interpreter.adaptivePredict(this._input, 2, this._ctx);
+			_alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
 			while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 				if (_alt === 1) {
 					if (this._parseListeners != null) {
@@ -136,21 +147,21 @@ export class DiceRollerParser extends Parser {
 					}
 					_prevctx = _localctx;
 					{
-					this.state = 19;
+					this.state = 22;
 					this._errHandler.sync(this);
-					switch ( this.interpreter.adaptivePredict(this._input, 1, this._ctx) ) {
+					switch ( this.interpreter.adaptivePredict(this._input, 2, this._ctx) ) {
 					case 1:
 						{
 						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
 						(_localctx as BinopContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(_localctx, _startState, DiceRollerParser.RULE_expr);
-						this.state = 10;
+						this.state = 13;
 						if (!(this.precpred(this._ctx, 4))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 4)");
 						}
-						this.state = 11;
-						(_localctx as BinopContext)._op = this.match(DiceRollerParser.T__2);
-						this.state = 12;
+						this.state = 14;
+						(_localctx as BinopContext)._op = this.match(DiceRollerParser.T__3);
+						this.state = 15;
 						(_localctx as BinopContext)._rhs = this.expr(5);
 						}
 						break;
@@ -160,41 +171,14 @@ export class DiceRollerParser extends Parser {
 						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
 						(_localctx as BinopContext)._lhs = _prevctx;
 						this.pushNewRecursionContext(_localctx, _startState, DiceRollerParser.RULE_expr);
-						this.state = 13;
+						this.state = 16;
 						if (!(this.precpred(this._ctx, 3))) {
 							throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
-						}
-						this.state = 14;
-						(_localctx as BinopContext)._op = this._input.LT(1);
-						_la = this._input.LA(1);
-						if (!(_la === DiceRollerParser.T__3 || _la === DiceRollerParser.T__4)) {
-							(_localctx as BinopContext)._op = this._errHandler.recoverInline(this);
-						} else {
-							if (this._input.LA(1) === Token.EOF) {
-								this.matchedEOF = true;
-							}
-
-							this._errHandler.reportMatch(this);
-							this.consume();
-						}
-						this.state = 15;
-						(_localctx as BinopContext)._rhs = this.expr(4);
-						}
-						break;
-
-					case 3:
-						{
-						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
-						(_localctx as BinopContext)._lhs = _prevctx;
-						this.pushNewRecursionContext(_localctx, _startState, DiceRollerParser.RULE_expr);
-						this.state = 16;
-						if (!(this.precpred(this._ctx, 2))) {
-							throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
 						}
 						this.state = 17;
 						(_localctx as BinopContext)._op = this._input.LT(1);
 						_la = this._input.LA(1);
-						if (!(_la === DiceRollerParser.T__5 || _la === DiceRollerParser.T__6)) {
+						if (!(_la === DiceRollerParser.T__4 || _la === DiceRollerParser.T__5)) {
 							(_localctx as BinopContext)._op = this._errHandler.recoverInline(this);
 						} else {
 							if (this._input.LA(1) === Token.EOF) {
@@ -205,15 +189,42 @@ export class DiceRollerParser extends Parser {
 							this.consume();
 						}
 						this.state = 18;
+						(_localctx as BinopContext)._rhs = this.expr(4);
+						}
+						break;
+
+					case 3:
+						{
+						_localctx = new BinopContext(new ExprContext(_parentctx, _parentState));
+						(_localctx as BinopContext)._lhs = _prevctx;
+						this.pushNewRecursionContext(_localctx, _startState, DiceRollerParser.RULE_expr);
+						this.state = 19;
+						if (!(this.precpred(this._ctx, 2))) {
+							throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
+						}
+						this.state = 20;
+						(_localctx as BinopContext)._op = this._input.LT(1);
+						_la = this._input.LA(1);
+						if (!(_la === DiceRollerParser.T__0 || _la === DiceRollerParser.T__6)) {
+							(_localctx as BinopContext)._op = this._errHandler.recoverInline(this);
+						} else {
+							if (this._input.LA(1) === Token.EOF) {
+								this.matchedEOF = true;
+							}
+
+							this._errHandler.reportMatch(this);
+							this.consume();
+						}
+						this.state = 21;
 						(_localctx as BinopContext)._rhs = this.expr(3);
 						}
 						break;
 					}
 					}
 				}
-				this.state = 23;
+				this.state = 26;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 2, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 3, this._ctx);
 			}
 			}
 		}
@@ -254,20 +265,22 @@ export class DiceRollerParser extends Parser {
 	}
 
 	public static readonly _serializedATN: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\v\x1B\x04\x02" +
-		"\t\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x05\x02\v\n\x02" +
-		"\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
-		"\x07\x02\x16\n\x02\f\x02\x0E\x02\x19\v\x02\x03\x02\x02\x02\x03\x02\x03" +
-		"\x02\x02\x02\x04\x03\x02\x06\x07\x03\x02\b\t\x02\x1D\x02\n\x03\x02\x02" +
-		"\x02\x04\x05\b\x02\x01\x02\x05\x06\x07\x03\x02\x02\x06\x07\x05\x02\x02" +
-		"\x02\x07\b\x07\x04\x02\x02\b\v\x03\x02\x02\x02\t\v\x07\n\x02\x02\n\x04" +
-		"\x03\x02\x02\x02\n\t\x03\x02\x02\x02\v\x17\x03\x02\x02\x02\f\r\f\x06\x02" +
-		"\x02\r\x0E\x07\x05\x02\x02\x0E\x16\x05\x02\x02\x07\x0F\x10\f\x05\x02\x02" +
-		"\x10\x11\t\x02\x02\x02\x11\x16\x05\x02\x02\x06\x12\x13\f\x04\x02\x02\x13" +
-		"\x14\t\x03\x02\x02\x14\x16\x05\x02\x02\x05\x15\f\x03\x02\x02\x02\x15\x0F" +
-		"\x03\x02\x02\x02\x15\x12\x03\x02\x02\x02\x16\x19\x03\x02\x02\x02\x17\x15" +
-		"\x03\x02\x02\x02\x17\x18\x03\x02\x02\x02\x18\x03\x03\x02\x02\x02\x19\x17" +
-		"\x03\x02\x02\x02\x05\n\x15\x17";
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\v\x1E\x04\x02" +
+		"\t\x02\x03\x02\x03\x02\x05\x02\x07\n\x02\x03\x02\x03\x02\x03\x02\x03\x02" +
+		"\x03\x02\x05\x02\x0E\n\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03\x02\x03" +
+		"\x02\x03\x02\x03\x02\x03\x02\x07\x02\x19\n\x02\f\x02\x0E\x02\x1C\v\x02" +
+		"\x03\x02\x02\x02\x03\x02\x03\x02\x02\x02\x04\x03\x02\x07\b\x04\x02\x03" +
+		"\x03\t\t\x02!\x02\r\x03\x02\x02\x02\x04\x06\b\x02\x01\x02\x05\x07\x07" +
+		"\x03\x02\x02\x06\x05\x03\x02\x02\x02\x06\x07\x03\x02\x02\x02\x07\b\x03" +
+		"\x02\x02\x02\b\t\x07\x04\x02\x02\t\n\x05\x02\x02\x02\n\v\x07\x05\x02\x02" +
+		"\v\x0E\x03\x02\x02\x02\f\x0E\x07\n\x02\x02\r\x04\x03\x02\x02\x02\r\f\x03" +
+		"\x02\x02\x02\x0E\x1A\x03\x02\x02\x02\x0F\x10\f\x06\x02\x02\x10\x11\x07" +
+		"\x06\x02\x02\x11\x19\x05\x02\x02\x07\x12\x13\f\x05\x02\x02\x13\x14\t\x02" +
+		"\x02\x02\x14\x19\x05\x02\x02\x06\x15\x16\f\x04\x02\x02\x16\x17\t\x03\x02" +
+		"\x02\x17\x19\x05\x02\x02\x05\x18\x0F\x03\x02\x02\x02\x18\x12\x03\x02\x02" +
+		"\x02\x18\x15\x03\x02\x02\x02\x19\x1C\x03\x02\x02\x02\x1A\x18\x03\x02\x02" +
+		"\x02\x1A\x1B\x03\x02\x02\x02\x1B\x03\x03\x02\x02\x02\x1C\x1A\x03\x02\x02" +
+		"\x02\x06\x06\r\x18\x1A";
 	public static __ATN: ATN;
 	public static get _ATN(): ATN {
 		if (!DiceRollerParser.__ATN) {
@@ -290,6 +303,7 @@ export class ExprContext extends ParserRuleContext {
 	}
 }
 export class ParenthesizedContext extends ExprContext {
+	public _negative!: Token;
 	public _inner!: ExprContext;
 	public expr(): ExprContext {
 		return this.getRuleContext(0, ExprContext);

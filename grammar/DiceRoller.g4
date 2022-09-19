@@ -3,7 +3,7 @@ options {}
 
 
 expr
-    : '(' inner=expr ')'                  # Parenthesized
+    : negative='-'?'(' inner=expr ')'                  # Parenthesized
     | lhs=expr op='d' rhs=expr                 # Binop 
     | lhs=expr op=('*' | '/') rhs=expr         # Binop
     | lhs=expr op=('+' | '-') rhs=expr         # Binop
@@ -12,9 +12,9 @@ expr
 
 NUMBER
     : 
-    [0-9]'.'([0-9]*)
+    '-'?([0-9]'.'([0-9]*)
     | [1-9]([0-9]*)
-    | '0'
+    | '0')
     ;
 
 WS

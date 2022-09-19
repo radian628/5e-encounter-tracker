@@ -1,3 +1,4 @@
+import { FocusEventHandler } from "react";
 import { StatusEffectEditor } from "./StatusEffect"
 import { StatusEffect } from "./Types"
 
@@ -5,9 +6,12 @@ let statusEffectIndex = 0;
 
 export function StatusEffectsEditor(props: {
     statusEffects: StatusEffect[],
-    setStatusEffects: (se: StatusEffect[]) => void
+    setStatusEffects: (se: StatusEffect[]) => void,
+    onFocus: FocusEventHandler<HTMLDivElement>
 }) {
-    return <div className="status-effects-container">
+    return <div className="status-effects-container"
+        onFocus={props.onFocus}
+    >
         {
             props.statusEffects.map((e, i) => {
                 return <StatusEffectEditor
