@@ -1,4 +1,4 @@
-import { createRef, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import { CreatureEditor } from './CreatureEditor'
@@ -7,6 +7,7 @@ import { roll } from './DiceRollerParser';
 import { DiceRollerEvaluatorInput, DiceRollerUI } from './DiceRollerUI';
 import { CreatureTemplate, CreatureTemplateEditor, instantiateCreature } from './CreatureTemplate';
 import { GenericPropertyTextInput } from './Util';
+import { help, HelpBox, endhelp } from './HelpBox';
 
 
 let key = 0;
@@ -59,6 +60,7 @@ function App() {
       }
     ))
   }
+
 
   return (
     <div className="App">
@@ -134,64 +136,86 @@ function App() {
 
         <div>
           <h2>Controls</h2>
-          <button
-            onClick={e => {
-              setRound(round + 1);
-              setCreatures(creatures.map(creature => {
-                return {
-                  ...creature,
-                  statusEffects: creature.statusEffects.map(effect => {return {
-                    ...effect,
-                    remainingTurns: effect.remainingTurns - 1
-                  }}).filter(effect => effect.remainingTurns >= 0)
-                }
-              }));
-            }}
-          >Advance Round</button>
-          <DiceRollerEvaluatorInput
-            value={round}
-            setValue={setRound}
-            className="resizing-text-input"
-          ></DiceRollerEvaluatorInput>
-          <CreatureTemplateEditor
-            template={template}
-            setTemplate={setTemplate}
-          ></CreatureTemplateEditor>
-          <button
-            onClick={() => {
-              setCreatures([...creatures, instantiateCreature(template)]);
-            }}
-          >Add Creature</button>
-          <button
-            onClick={() => {
-              setCreatures([...creatures, ...new Array(creaturesToAddCount).fill(0)
-                .map(e => { return instantiateCreature(template) })]);
-            }}
-          >Add N Creatures</button>
-          <DiceRollerEvaluatorInput
-            value={creaturesToAddCount}
-            setValue={setCreaturesToAddCount}
-            className="resizing-text-input"
-          ></DiceRollerEvaluatorInput>
-
-          <button
-            onClick={() => {
-             damageSelectedCreature();
-            }}
-          >Damage Selected by...</button>
-          <GenericPropertyTextInput<typeof settings>
-              className="resizing-text-input"
-              getter={settings}
-              setter={setSettings}
-              prop={"deltaHP"}
-              autoFocus={false}
-              onKeyDown={e => {
-                if (e.key == "Enter") {
-                  damageSelectedCreature();
-                }
+          <div 
+            className="ui-group"
+            onMouseEnter={help(<p>
+              Use the button to advance the round. This changes the "rounds remaining" for status effects on creatures. You can also change the round directly, but status effects will not be updated.
+            </p>)}
+          >
+            <button
+              onClick={e => {
+                setRound(round + 1);
+                setCreatures(creatures.map(creature => {
+                  return {
+                    ...creature,
+                    statusEffects: creature.statusEffects.map(effect => {return {
+                      ...effect,
+                      remainingTurns: effect.remainingTurns - 1
+                    }}).filter(effect => effect.remainingTurns >= 0)
+                  }
+                }));
               }}
-          ></GenericPropertyTextInput>
+            >Advance Round</button>
+            <DiceRollerEvaluatorInput
+              value={round}
+              setValue={setRound}
+              className="resizing-text-input"
+            ></DiceRollerEvaluatorInput>
+          </div>
+
+
+          <div
+            className="ui-group"
+          >
+            <CreatureTemplateEditor
+              template={template}
+              setTemplate={setTemplate}
+            ></CreatureTemplateEditor>
+            <button
+              onMouseEnter={help(<p>Add a single creature to the encounter.</p>)}
+              onClick={() => {
+                setCreatures([...creatures, instantiateCreature(template)]);
+              }}
+            >Add Creature</button>
+            <button
+              onMouseEnter={help(<p>Add multiple creatures to the encounter. Health is rolled separately. Use the input below to change the number of creatures to add.</p>)}
+              onClick={() => {
+                setCreatures([...creatures, ...new Array(creaturesToAddCount).fill(0)
+                  .map(e => { return instantiateCreature(template) })]);
+              }}
+            >Add N Creatures</button>
+            <DiceRollerEvaluatorInput
+              value={creaturesToAddCount}
+              setValue={setCreaturesToAddCount}
+              className="resizing-text-input"
+            ></DiceRollerEvaluatorInput>
+          </div>
+
+          <div
+            className="ui-group"
+            onMouseEnter={help(<p>Decreases a group of creatures' health by a specified amount (use negative values for healing).</p>)}
+          >
+            <button
+              onClick={() => {
+              damageSelectedCreature();
+              }}
+            >Damage Selected by...</button>
+            <GenericPropertyTextInput<typeof settings>
+                className="resizing-text-input"
+                getter={settings}
+                setter={setSettings}
+                prop={"deltaHP"}
+                autoFocus={false}
+                onKeyDown={e => {
+                  if (e.key == "Enter") {
+                    damageSelectedCreature();
+                  }
+                }}
+            ></GenericPropertyTextInput>
+          </div>
         </div>
+
+        <HelpBox></HelpBox>
       </div>
     </div>
   )

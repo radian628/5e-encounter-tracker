@@ -1,4 +1,6 @@
+import React from "react";
 import { FocusEventHandler } from "react";
+import { help } from "./HelpBox";
 import { StatusEffectEditor } from "./StatusEffect"
 import { StatusEffect } from "./Types"
 
@@ -27,6 +29,9 @@ export function StatusEffectsEditor(props: {
             })
         }
         <button
+            onMouseEnter={help(<React.Fragment>
+                <p>Add a new status effect</p>
+            </React.Fragment>)}
             onClick={se => {
                 props.setStatusEffects([...props.statusEffects, {
                     name: "",

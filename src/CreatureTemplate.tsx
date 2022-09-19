@@ -1,6 +1,7 @@
 import { roll } from "./DiceRollerParser";
 import { Creature } from "./Types";
 import { GenericPropertyTextInput, propSetter } from "./Util";
+import {help } from "./HelpBox";
 
 export type CreatureTemplate = {
     name: string,
@@ -26,12 +27,14 @@ export function CreatureTemplateEditor(props: {
 
     return <div>
         <GenericPropertyTextInput<CreatureTemplate>
+            onMouseEnter={help(<p>Creature name.</p>)}
             className="resizing-text-input"
             getter={props.template}
             setter={props.setTemplate}
             prop={"name"}
         ></GenericPropertyTextInput>
         <GenericPropertyTextInput<CreatureTemplate>
+            onMouseEnter={help(<p>Randomized creature HP (uses same syntax as the Dice Roller). When a creature is created, the health dice are rolled.</p>)}
             className="resizing-text-input"
             getter={props.template}
             setter={props.setTemplate}

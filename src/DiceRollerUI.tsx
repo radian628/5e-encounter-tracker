@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { roll } from "./DiceRollerParser";
 import ContentEditable from "react-contenteditable";
+import { help, endhelp } from './HelpBox';
 
 let keyindex = 0;
 
@@ -57,7 +58,12 @@ export function DiceRollerUI() {
     })
 
     return <div>
-        <div className="dice-roller-history" ref={rollerHistoryRef}>
+        <div 
+         onMouseEnter={help(<p>
+            You can view and reroll past dice rolls using the up/down arrow keys while the dice roller is focused, or by clicking on a past roll.
+          </p>)}
+        
+        className="dice-roller-history" ref={rollerHistoryRef}>
             {
                 diceRollerHistory.map((data, i) => {
                     const { code, result, index} = data;
@@ -81,6 +87,9 @@ export function DiceRollerUI() {
             }
         </div>
         <input
+            onMouseEnter={help(<p>
+                To roll dice, use the "d" syntax&mdash; for instance, "3d6 + 4" means "sum the outcomes of the rolls of three six-sided dice, plus four." The dice roller supports the four basic calculator operations (+, -, *, and /), as well as parentheses. Press the button or ENTER to roll.
+              </p>)}
             ref={rollerInputRef}
             value={code}
             onInput={e => {
@@ -101,6 +110,7 @@ export function DiceRollerUI() {
             }}
         ></input>
         <button
+            
             onClick={() => {
                 executeRoll();
             }}

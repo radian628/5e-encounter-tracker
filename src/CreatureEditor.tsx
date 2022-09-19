@@ -3,6 +3,7 @@ import { DiceRollerEvaluatorInput } from "./DiceRollerUI";
 import { StatusEffectsEditor } from "./StatusEffectsEditor";
 import { Creature, FocusedInput } from "./Types";
 import { GenericPropertyNumberInput, GenericPropertyTextInput, propSetter } from "./Util";
+import { help } from "./HelpBox";
 
 type CreatureEditorProps =
 { 
@@ -28,7 +29,11 @@ export function CreatureEditor(props: CreatureEditorProps) {
         onFocus={props.onFocus}
         style={{ backgroundColor: props.selected ? "#aaaaaa" : "" }}
     >
-        <td>
+        <td
+            onMouseEnter={help(
+                <p>Click and drag on the blank space immediately to the left of the creature's "X" button to select multiple creatures. Selected creatures are highlighted in grey.</p>
+            )}
+        >
             <div className="row">
                 <span 
                     onMouseEnter={e => {
@@ -54,7 +59,12 @@ export function CreatureEditor(props: CreatureEditorProps) {
                 ></GenericPropertyTextInput>
             </div>
         </td>
-        <td>
+        <td
+            onMouseEnter={help(<React.Fragment>
+                <p>Creature HP supports the dice roller syntax--- for instance, if a creature has 123 HP and you want to heal 57 HP, you could type "123 + 57." This is then evaluated automatically when you either hit ENTER or edit something else.</p>
+                <p>You can also navigate through creatures using the up/down arrow keys.</p>
+            </React.Fragment>)}
+        >
             <div className="hp">
                 <DiceRollerEvaluatorInput
                     autoFocus={shouldFocus(FocusedInput.CURRENT_HP)}
